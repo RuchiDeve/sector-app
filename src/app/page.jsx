@@ -17,7 +17,7 @@ export default function Home() {
     queryKey: ["getUsersApi"],
     queryFn: getUsersApi,
   });
-  
+
   const handleAddNewClient = () => {
     router.push("/user/add-user");
   };
@@ -77,7 +77,7 @@ export default function Home() {
       ),
       header: () => <span className="pl-4">Email</span>,
     }),
-    columnHelper.accessor("phoneNumber", {
+    columnHelper.accessor("subSector", {
       cell: ({ row }) => (
         <div>
           {row?.original?.id && (
@@ -85,12 +85,12 @@ export default function Home() {
               href={`/user/${row?.original?.id}`}
               className="px-4  py-4 flex items-center cursor-pointer"
             >
-              <span className="">{row?.original?.phoneNumber}</span>
+              <span className="">{row?.original?.subSector}</span>
             </Link>
           )}
         </div>
       ),
-      header: () => <span>Phone Number</span>,
+      header: () => <span>Sub Sector</span>,
     }),
     columnHelper.accessor("sector", {
       cell: ({ row }) => (
@@ -151,7 +151,7 @@ export default function Home() {
           </div>
           <div onClick={handleAddNewClient}>
             <Button
-              btnText="Create Users"
+              btnText="Create User"
               className="bg-white justify-center flex text-[#10172A] font-semibold"
             />
           </div>

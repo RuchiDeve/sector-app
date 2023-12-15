@@ -1,5 +1,5 @@
 "use client";
-import { Input, Selector } from "@/app/components";
+import { Input, Selector, SubSelector } from "@/app/components";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -24,6 +24,7 @@ const schema = yup.object().shape({
     .min(6, "Phone number must be greater than 6 numbers")
     .max(12, "Phone number must be less than 12 numbers"),
   sector: yup.string().required("Sector is required"),
+  subSector: yup.string().required("Sub-Sector is required"),
 });
 
 const successNotifying = () => {
@@ -40,6 +41,8 @@ const errorNotifying = () => {
 
 export const EditUser = ({ editUserID, userDetails, setShowEditUser }) => {
   const [getSelectedSector, setGetSelectedSector] = useState();
+  const [getSelectedSubSector, setGetSelectedSubSector] = useState();
+  const [subSectorOptions, setSubSectorOptions] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
   const queryClient = useQueryClient();
 
@@ -73,12 +76,21 @@ export const EditUser = ({ editUserID, userDetails, setShowEditUser }) => {
       lastName: userDetails?.lastName,
       email: userDetails?.email,
       sector: userDetails?.sector,
+      subSector: userDetails?.subSector,
       phoneNumber: userDetails?.phoneNumber,
     },
   });
 
   const handleSelectSelector = (item) => {
     setGetSelectedSector(item?.name);
+    setSubSectorOptions(item?.subSectors || []);
+  };
+
+  const handleSelectSubSelector = (item) => {
+    setGetSelectedSubSector(item?.name);
+    console.log(item?.name, "this is the selected sub sector======");
+    console.log(getSelectedSubSector, "this is the selected sub sector======");
+
   };
 
   const onSubmitHandler = (data) => {
@@ -87,6 +99,7 @@ export const EditUser = ({ editUserID, userDetails, setShowEditUser }) => {
       lastName: data?.lastName,
       email: data?.email,
       sector: getSelectedSector,
+      subSector: getSelectedSubSector,
       phoneNumber: data?.phoneNumber,
     };
     mutate({ data: requestData, id: editUserID });
@@ -135,7 +148,19 @@ export const EditUser = ({ editUserID, userDetails, setShowEditUser }) => {
                     {errors.email?.message}
                   </p>
                 </div>
-                
+                <div className="my-6">
+              <Input
+                type="number"
+                inputName="phoneNumber"
+                label="Phone Number"
+                register={{ ...register("phoneNumber") }}
+                editInput="text-[#10172A]"
+                placeholder="Enter Phone Number"
+              />
+              <p className="text-red-500 text-[0.7rem] text-left">
+                {errors?.phoneNumber?.message}
+              </p>
+            </div>
               </div>
 
               <div className="w-full space-y-6 md:w-1/2">
@@ -168,21 +193,26 @@ export const EditUser = ({ editUserID, userDetails, setShowEditUser }) => {
                     </p>
                   )}
                 </div>
+
+                <div>
+                  <SubSelector
+                    label="Sub-Sector"
+                    focusContent=""
+                    placeholder="search"
+                    onSelect={handleSelectSubSelector}
+                    inputData={subSectorOptions}
+                    register={{ ...register("subSector") }}
+                    getSelectedSector={userDetails?.subSector}
+                  />
+                  {!getSelectedSubSector && (
+                    <p className="text-red-500 text-[0.7rem] text-left">
+                      {errors.subSector?.message}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-            <div className="my-6">
-                  <Input
-                    type="number"
-                    inputName="phoneNumber"
-                    label="Phone Number"
-                    register={{ ...register("phoneNumber") }}
-                    editInput="text-[#10172A]"
-                    placeholder="Enter Phone Number"
-                  />
-                  <p className="text-red-500 text-[0.7rem] text-left">
-                    {errors?.phoneNumber?.message}
-                  </p>
-                </div>
+            
             <div className="flex justify-between pr-0 mt-8 lg:justify-end  gap-6">
               <div
                 onClick={() => {

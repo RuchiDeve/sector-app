@@ -39,7 +39,7 @@ const UserProfile = ({ params }) => {
           </div>
 
           {/* user details */}
-          <div className="ml-1 md:flex md:space-x-40 md:ml-4 my-20">
+          <div className="ml-1 md:flex md:space-x-30 md:ml-4 my-20">
             <div className="space-y-6 md:w-1/3">
               <UserDetails
                 title="First Name"
@@ -69,6 +69,11 @@ const UserProfile = ({ params }) => {
               <UserDetails
                 title="Phone Number"
                 content={userDetails?.phoneNumber}
+                focusContent=""
+              />
+              <UserDetails
+                title="SubSector"
+                content={userDetails?.subSector}
                 focusContent=""
               />
             </div>
